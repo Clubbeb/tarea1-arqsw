@@ -1,0 +1,6 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"     # puerto que usan publisher y subscribers
+      - "15672:15672"   # panel web de administración
