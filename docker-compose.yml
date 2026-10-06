@@ -1,6 +1,90 @@
+# Sistema de notificación de sismos (pub-sub + pull)
+#   docker compose up --build -d              -> rabbitmq + api + 5 subscribers
+#   docker compose run --rm publisher         -> publica todos los sismos
+#   docker compose run --rm publisher <id>    -> publica un sismo
+#
+# Una sola imagen (sismos-app): la construye el servicio api; los subscribers
+# solo la usan (pull_policy: never) para no construirla varias veces en paralelo.
+x-subscriber: &subscriber
+  image: sismos-app
+  pull_policy: never
+  command: ["python", "subscriber/subscriber.py"]
+  environment: &env-subscriber
+    RABBITMQ_HOST: rabbitmq
+    API_URL: http://api:8000
+  depends_on:
+    rabbitmq:
+      condition: service_healthy
+    api:
+      condition: service_started
+  restart: on-failure
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
+    hostname: rabbitmq  # RabbitMQ guarda sus datos según el hostname (nodo)
     ports:
       - "5672:5672"     # puerto que usan publisher y subscribers
-      - "15672:15672"   # panel web de administración
+      - "15672:15672"   # panel web de administración (guest/guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 12
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq  # colas durables y mensajes persistentes sobreviven a down/up
+
+  api:
+    build: .
+    image: sismos-app
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+
+  subscriber-arica:
+    <<: *subscriber
+    environment:
+      <<: *env-subscriber
+      CIUDAD: arica
+
+  subscriber-coquimbo:
+    <<: *subscriber
+    environment:
+      <<: *env-subscriber
+      CIUDAD: coquimbo
+
+  subscriber-valparaiso:
+    <<: *subscriber
+    environment:
+      <<: *env-subscriber
+      CIUDAD: valparaiso
+
+  subscriber-concepcion:
+    <<: *subscriber
+    environment:
+      <<: *env-subscriber
+      CIUDAD: concepcion
+
+  subscriber-punta-arenas:
+    <<: *subscriber
+    environment:
+      <<: *env-subscriber
+      CIUDAD: punta_arenas
+
+  # Se lanza a demanda: docker compose run --rm publisher [id_sismo]
+  # (tiene build propio por si se ejecuta antes que "up"; no corre en paralelo con api
+  #  porque su perfil lo excluye de "docker compose up")
+  publisher:
+    build: .
+    image: sismos-app
+    entrypoint: ["python", "publisher/publisher.py"]
+    command: []
+    environment:
+      RABBITMQ_HOST: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    profiles: ["publisher"]
+
+volumes:
+  rabbitmq_data:

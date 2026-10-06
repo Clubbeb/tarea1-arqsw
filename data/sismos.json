@@ -1,0 +1,74 @@
+[
+  {
+    "id": "2017-04-24-213830",
+    "fecha_local": "2017-04-24T18:38:30-03:00",
+    "fecha_utc": "2017-04-24T21:38:30Z",
+    "latitud": -33.038,
+    "longitud": -72.062,
+    "profundidad_km": 28.0,
+    "magnitud": 6.9,
+    "tipo_magnitud": "Mw",
+    "referencia_geografica": "40 km al O de Valparaíso",
+    "agencia": "USGS"
+  },
+  {
+    "id": "2014-04-01-234647",
+    "fecha_local": "2014-04-01T20:46:47-03:00",
+    "fecha_utc": "2014-04-01T23:46:47Z",
+    "latitud": -19.610,
+    "longitud": -70.769,
+    "profundidad_km": 25.0,
+    "magnitud": 8.2,
+    "tipo_magnitud": "Mw",
+    "referencia_geografica": "93 km al NO de Iquique",
+    "agencia": "USGS"
+  },
+  {
+    "id": "2011-01-02-202017",
+    "fecha_local": "2011-01-02T17:20:17-03:00",
+    "fecha_utc": "2011-01-02T20:20:17Z",
+    "latitud": -38.355,
+    "longitud": -73.326,
+    "profundidad_km": 24.0,
+    "magnitud": 7.2,
+    "tipo_magnitud": "Mw",
+    "referencia_geografica": "42 km al NNO de Carahue",
+    "agencia": "USGS"
+  },
+  {
+    "id": "1996-08-31-185920",
+    "fecha_local": "1996-08-31T14:59:20-04:00",
+    "fecha_utc": "1996-08-31T18:59:20Z",
+    "latitud": -52.992,
+    "longitud": -72.378,
+    "profundidad_km": 33.0,
+    "magnitud": 5.0,
+    "tipo_magnitud": "Ml",
+    "referencia_geografica": "99 km al O de Punta Arenas",
+    "agencia": "USGS"
+  },
+  {
+    "id": "2007-04-21-175346",
+    "fecha_local": "2007-04-21T13:53:46-04:00",
+    "fecha_utc": "2007-04-21T17:53:46Z",
+    "latitud": -45.243,
+    "longitud": -72.648,
+    "profundidad_km": 36.7,
+    "magnitud": 6.2,
+    "tipo_magnitud": "Mw",
+    "referencia_geografica": "18 km al N de Puerto Aysén",
+    "agencia": "USGS"
+  },
+  {
+    "id": "2019-01-20-013252",
+    "fecha_local": "2019-01-19T22:32:52-03:00",
+    "fecha_utc": "2019-01-20T01:32:52Z",
+    "latitud": -30.040,
+    "longitud": -71.382,
+    "profundidad_km": 63.0,
+    "magnitud": 6.7,
+    "tipo_magnitud": "Mw",
+    "referencia_geografica": "10 km al SSO de Coquimbo",
+    "agencia": "USGS"
+  }
+]
