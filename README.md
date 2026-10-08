@@ -41,10 +41,10 @@ del **modelo pull** (servicio HTTP con FastAPI).
 
 ### Prerrequisitos
 
-- **Docker** con Docker Compose v2 (por ejemplo, Docker Desktop abierto). Revisar con `docker compose version`.
-- Opcional, solo para ejecutar sin Docker: **Python 3.10+** y `pip install -r requirements.txt`.
+- **Docker** con Docker Compose v2 . Revisar con `docker compose version`.
 
-### Con Docker (recomendado)
+
+### Con Docker 
 
 ```bash
 # 1. Levantar RabbitMQ, la API y los 5 subscribers
@@ -80,16 +80,6 @@ el aviso; el publisher lo detecta y lo informa ("evento no entregado").
 | `2007-04-21-175346` | Aysén 2007, 6.2 Mw | ninguna |
 | `2019-01-20-013252` | Coquimbo 2019, 6.7 Mw | Coquimbo (10 km), Valparaíso (334 km) |
 
-### Sin Docker (opcional)
-
-Con RabbitMQ corriendo en `localhost` (por ejemplo `docker compose up -d rabbitmq`), desde la raíz del repo
-y cada comando en una terminal distinta:
-
-```bash
-uvicorn api.main:app --port 8000
-python subscriber/subscriber.py arica          # repetir con: coquimbo, valparaiso, concepcion, punta_arenas
-python publisher/publisher.py                  # o: python publisher/publisher.py <id>
-```
 
 Variables de entorno: `RABBITMQ_HOST` (por defecto `localhost`), `API_URL` (por defecto
 `http://localhost:8000`), `CIUDAD` (alternativa al argumento del subscriber), `PAUSA_SEGUNDOS`
@@ -122,22 +112,6 @@ Variables de entorno: `RABBITMQ_HOST` (por defecto `localhost`), `API_URL` (por 
     para no perder un sismo que le interesa. Mientras la API siga caída, esto retrasa los siguientes avisos
     de esa ciudad (ver DISCUSION.md).
 
-**Otros**
-
-- **Distancia:** fórmula de **haversine** con un radio terrestre de 6371.0088 km (sin dependencias extra).
-  El umbral es estricto: < 500 km.
-- **Un solo script de subscriber**, parametrizado por la ciudad, en lugar de 5 copias del código.
-  Docker Compose levanta 5 contenedores con la misma imagen y distinto valor de `CIUDAD`.
-- **Datos en memoria:** la API carga `data/sismos.json` al iniciar; no hay base de datos ni endpoint POST,
-  tal como permite el enunciado.
-  - Los sismos se basan en eventos reales de Chile (fecha, coordenadas, profundidad y magnitud del catálogo
-    de USGS) y la redacción de la referencia geográfica imita al CSN.
-  - El sismo de Magallanes de 1996 es ilustrativo: está para tener un caso que solo le interese a Punta Arenas.
-- **Arranque y fallas:**
-  - Publisher y subscribers reintentan la conexión a RabbitMQ al iniciar (10 intentos cada 3 s), y Compose
-    espera a que RabbitMQ esté sano antes de levantarlos.
-  - Si RabbitMQ se cae durante la ejecución, el subscriber termina y Docker lo reinicia (`restart: on-failure`).
-    Sin Docker, hay que volver a lanzarlo a mano.
 
 ## Discusión
 
