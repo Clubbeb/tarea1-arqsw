@@ -44,7 +44,7 @@ del **modelo pull** (servicio HTTP con FastAPI).
 - **Docker** con Docker Compose v2 . Revisar con `docker compose version`.
 
 
-### Con Docker 
+###  Docker 
 
 ```bash
 # 1. Levantar RabbitMQ, la API y los 5 subscribers
